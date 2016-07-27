@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1466043501416.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "9368DF28",
+    "lastKnownWriteTime" : 30399714104049761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "anops1wmoh",
+        "caption" : "test",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=test&cache_key=anops1wmoh",
+        "displayedObservations" : 1000,
+        "environment" : "",
+        "object" : "test",
+        "totalObservations" : 1000,
+        "variables" : 3
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

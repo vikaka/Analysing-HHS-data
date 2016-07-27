@@ -1,0 +1,25 @@
+{
+    "contents" : "",
+    "created" : 1455627639033.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "8D3BF566",
+    "lastKnownWriteTime" : 7011605692497750387,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "zwtotm5w9t",
+        "caption" : "State_cities",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=State_cities&cache_key=zwtotm5w9t",
+        "displayedObservations" : 620,
+        "environment" : "",
+        "object" : "State_cities",
+        "totalObservations" : 620,
+        "variables" : 17
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
