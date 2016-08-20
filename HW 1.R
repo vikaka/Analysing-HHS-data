@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 library(XML)
 
 #Q1 
@@ -127,3 +128,134 @@ table_2 <- table_2$`table-4`
 significance.lm <- lm(flu_max_2015)
 
 
+=======
+library(XML)
+
+#Q1 
+#Part 1 :
+#The Office of Intergovernmental and External Affairs hosts ten Regional Offices that directly serve state and local organizations. Each Regional Director ensures the Department maintains close contact with state, local, and tribal partners and addresses the needs of communities and individuals served through HHS programs and policies.
+
+#Part 2:
+US.Flu.Data <- read.csv("C:/Users/Vishesh Kakarala/Desktop/Foundations of data science/HW 1/US Flu Data.csv")
+US.Flu.Data$Date = as.Date(US.Flu.Data$Date, format = "%m/%d/%Y")
+
+#HHS region  & states comparison
+
+# comparison between HHS region 2 and states -New york & New Jersey
+
+# In order to compare, we plot the data from the HHS region and the states data.
+plot(US.Flu.Data$Date, US.Flu.Data$HHS.Region.2..NJ..NY.,main = "HHS region 2 Vs States", type = "p", col = "blue", pch = 20)
+points(US.Flu.Data$Date, US.Flu.Data$New.York, col = "yellow", pch = 20)
+points(US.Flu.Data$Date, US.Flu.Data$New.Jersey, col = "red", pch = 20)
+
+# The states data is simlar to the HHS region except in the period from 2014 to 2016 where HHS region shows higher peak value and longer period of activity when compared to the state values
+
+#part3
+
+#grouping cities as States 
+
+State_cities <- data.frame(US.Flu.Data$Date)
+colnames(State_cities) <- "Date"
+State_cities$Date = as.Date(State_cities$Date, format = "%m/%d/%Y")
+
+State_cities$Alaska <- US.Flu.Data$Anchorage..AK
+State_cities$Alabama <- US.Flu.Data$Birmingham..AL
+State_cities$Arkansas <- US.Flu.Data$Little.Rock..AR
+State_cities$Arizona <- apply(US.Flu.Data[,67:71],1,function(x) mean(x,na.rm = TRUE))
+State_cities$California <- apply(US.Flu.Data[,72:82],1,function(x) mean(x,na.rm = TRUE))
+State_cities$Colorado <- apply(US.Flu.Data[,83:84],1,function(x) mean(x,na.rm = TRUE))
+State_cities$Florida <- apply(US.Flu.Data[,86:90],1,function(x) mean(x,na.rm = TRUE))
+State_cities$Georgia <- apply(US.Flu.Data[,91:92],1,function(x) mean(x,na.rm = TRUE))
+State_cities$Hawaii <- US.Flu.Data$Honolulu..HI
+State_cities$Iowa <- US.Flu.Data$Des.Moines..IA
+State_cities$Idaho <- US.Flu.Data$Boise..ID
+State_cities$Illinois <- US.Flu.Data$Chicago..IL
+State_cities$Indiana <- US.Flu.Data$Indianapolis..IN
+State_cities$Kansas <- US.Flu.Data$Wichita..KS
+State_cities$Kentucky <- US.Flu.Data$Lexington..KY
+State_cities$Louisiana <- US.Flu.Data$Baton.Rouge..LA
+
+#to understand the comparison between the cities and states data we take an example
+
+#comparing cities of Arizona with overall data from the state of Arizona
+summary(US.Flu.Data$Arizona)
+
+summary(State_cities$Arizona)
+
+#There are no Missing values and like to like comparison can be done
+
+boxplot(US.Flu.Data$Arizona,State_cities$Arizona, names = c("Arizona","Cities Arizona"),horizontal = TRUE)
+
+#Using a box plot we can visually determine the distribution of data and central tenedencies are similar for the state and cities grouping
+
+# Comparing cities from Alaska and the data of the entire State of Alaska
+
+summary(US.Flu.Data$Alaska)
+
+summary(State_cities$Alaska)
+
+# we find that there is missing data in both the columns.
+
+#We can populate missing data using interpolation, here Spline Interpolation is used to predict the missing values
+
+Alaska_interpol <- splinefun(US.Flu.Data$Alaska, y = US.Flu.Data$date, method = "periodic")
+US.Flu.Data$Alaska[1:63]<-Alaska_interpol(1:63)
+
+Alaska_cities_interpol <- splinefun(State_cities$Alaska, y = State_cities$date, method = "periodic")
+State_cities$Alaska[1:55]<-Alaska_interpol(1:55)
+
+# Now we can compare the two columns of data
+summary(US.Flu.Data$Alaska)
+
+summary(State_cities$Alaska)
+
+boxplot(US.Flu.Data$Alaska,State_cities$Alaska)
+
+# here we find the two data sets to be similar.
+
+
+#q2
+
+#https://developers.google.com/public-data/docs/canonical/countries_csv
+
+world_data <- read.csv("~/learning test/world_data.csv")
+world_data_2015 <- world_data[628:659,]
+flu_max <- data.frame(apply(world_data_2015[,2:30], 2,function(x) which.max(x)))
+rownames(flu_max) <- colnames(world_data_2015[2:30])
+colnames(flu_max) <- "Max_flu"
+flu_max$Max_flu <- world_data_2015[c(flu_max$Max_flu),1]
+flu_max$Max_flu = as.Date(flu_max$Max_flu, format = "%m/%d/%Y")
+
+world_lat <- read.csv("~/learning test/world_lat.csv")
+
+rownames(world_lat) <- world_lat$name
+
+rownames(flu_max)[16]<- "New Zealand"
+rownames(flu_max)[28]<- "United States"
+rownames(flu_max)[23]<- "South Africa"
+
+flu_max$latitude <- world_lat[match(rownames(flu_max),rownames(world_lat)),]$latitude
+
+plot(flu_max$Max_flu,flu_max$latitude, main = "Max week of Flu in 2015 Vs Central Latitude of countries",xlab = "Central Latitude", ylab = "Max week of Flu in 2015", type = "p", col = "blue", pch = 20)
+text(flu_max$Max_flu,flu_max$latitude,labels = row.names(flu_max),pos = 1)
+
+# It is clear from the graph that Flu search trends are seasonal depending on the position of the countries latitude above or below the equator. With flu search trends increasing in the peak winter season in the northern hemisphere and in the peak summer months in the souther hemisphere.
+#Q3 - Web Scraping
+# part a reading vaccine status Data
+test_table <- readHTMLTable("http://www.cdc.gov/mmwr/preview/mmwrhtml/mm6401a4.htm?s_cid=mm6401", header = TRUE, trim = TRUE)
+table1 <- data.frame(test_table$`table-3`)
+table1 = table1[-(1:3),]
+table1 = table1[-38,]
+colnames(table1) <- c("charecteristics","Influenza_positive_no","Influenza_positive_%","Influenza_negative_no","Influenza_negative_%","Test_result_P_value","vaccinated_status_no","vaccinated_status_Total","vaccinated_status_%","vaccinated_status_pvalue")
+rownames(table1) <- table1[,1]
+table1<-table1[,-1]
+
+# Part B - example of a similar table- table showing Drug overdose and deaths by by sex, age, race and Hispanic origin, Census region, and state —United States, 2013 and 2014
+# from CDC's morbidity and mortality report(MMWR)
+table_2 <- readHTMLTable("http://www.cdc.gov/mmwr/preview/mmwrhtml/mm6450a3.htm?s_cid=mm6450a3_w")
+table_2 <- table_2$`table-4`
+
+significance.lm <- lm(flu_max_2015)
+
+
+>>>>>>> origin/master
